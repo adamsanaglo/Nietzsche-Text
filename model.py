@@ -156,6 +156,3 @@ gennames = Generator()
 # Loads the model from the checkpoint
 gennames.load_model()
 print(gennames.generate())
-
-
-new_list = ["brigade"]

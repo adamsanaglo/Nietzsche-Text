@@ -115,6 +115,3 @@ async def on_message(message):
 
 client.loop.create_task(update_stats())
 client.run("NzA5MDAzMzQ5MjgxOTk2ODIx.Xu5zYQ.GCx4CFSiUGf7GdUEv2s3x9bhc80")
-
-print(new_list[0])
-gennames.generate()

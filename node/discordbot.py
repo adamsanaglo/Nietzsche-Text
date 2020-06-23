@@ -45,7 +45,7 @@ def format_meaning(word, synsets):
 async def handle_message(message):
 
     word = message.content[5:]
-    embed = discord.Embed(title=f"Our spies have sighted the {word} ")
+    embed = discord.Embed(title=f"Let the {word} be made known to thee")
     embed.set_image(url=generate_image(word))
     await message.channel.send(embed=embed)
     try:
@@ -87,20 +87,28 @@ async def on_message(message):
     global messages
     messages += 1
     id = client.get_guild(709006557358063636)
-    print(message.content) # Now every message sent will be printed to the console
+
+    # Printing the message to the console
+    print(message.content)
     print("--------------------------------------------------------------------")
 
     channels = ["commands", "general"]
     users = ["dynamic#6160"]
-    if str(message.channel) in channels and str(message.author) in users: # Places restrictions on responsivity of the bot
 
-        if message.content.find("hello") or message.content.find("awaken") != -1:
-            await message.channel.send("Ravel in my presence my brethren")  # If the user says !hello we will send back hi
-        elif message.content == "!users" :
+    if str(message.channel) in channels and str(message.author) in users:
+
+        if message.content.find("awaken") != -1:
+            await message.channel.send("Ravel in my presence my brethren")
+
+        elif message.content == "!users":
             await message.channel.send("## of Members: ", id.member_count)
 
-    if message.content.startswith('/spy '):
+    if message.content.startswith('seek '):
         await handle_message(message)
+
+    elif message.content.startswith("preach"):
+
+        await message.channel.send(str(gennames.generate()))
 
 
 

@@ -107,7 +107,6 @@ async def on_message(message):
         await handle_message(message)
 
     elif message.content.startswith("preach"):
-
         await message.channel.send(str(gennames.generate()))
 
 

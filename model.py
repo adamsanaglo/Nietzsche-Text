@@ -3,6 +3,7 @@ import torch.nn as nn
 import string
 import random
 import sys
+import re
 import unidecode
 
 # Device configuration
@@ -12,17 +13,28 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 all_characters = string.printable
 n_characters = len(all_characters)
 
+# Replaces multiple whitespaces in the file with singles
+'''
+fin = open(, "rt")
+fout = open("cleaned_file(3).txt", "wt")
+
+for line in fin:
+    fout.write(' '.join(line.split()))
+
+fin.close()
+fout.close()
+
+'''
 
 # Parses the file to remove all non-alphabetic characters
 
-# with open(r"C:\Users\Adams\PycharmProjects\TextRNN\Nietzsche.txt", encoding='utf-8') as f, open("cleaned_file.txt", "w") as n:
-#  x = f.read()
+# with open("schopenhauer.txt", encoding="utf-8") as f, open("schopen.txt", "w") as n:
+# x = f.read()
 # result = re.sub(r"[^a-z\s]", "", x, 0, re.IGNORECASE | re.MULTILINE)
 # n.write(result)
 
-
 # Reads the cleaned text file
-file = unidecode.unidecode(open(r"C:\Users\Adams\PycharmProjects\TextRNN\cleaned_file.txt", encoding='utf-8').read())
+file = unidecode.unidecode(open(r"C:\Users\Adams\PycharmProjects\TextRNN\schopen.txt", encoding='utf-8').read())
 
 
 class RNN(nn.Module):
@@ -47,10 +59,17 @@ class RNN(nn.Module):
         return hidden, cell
 
 
+# Function to generate random letter
+def gen_letter():
+    lower_upper_alphabet = string.ascii_letters.upper()
+    random_letter = random.choice(lower_upper_alphabet)
+    return str(random_letter)
+
+
 class Generator:
     def __init__(self):
         self.chunk_len = 250
-        self.num_epochs = 20000
+        self.num_epochs = 5000
         self.batch_size = 1
         self.print_every = 50
         self.hidden_size = 256
@@ -77,11 +96,8 @@ class Generator:
 
         return text_input.long(), text_target.long()
 
-    lower_upper_alphabet = string.ascii_letters.upper()
-    random_letter = random.choice(lower_upper_alphabet)
-
-    def generate(self, initial_str=str(random_letter), predict_len=100, temperature=0.85):
-
+    def generate(self, predict_len=100, temperature=0.85):
+        initial_str = gen_letter()
         hidden, cell = self.rnn.init_hidden(batch_size=self.batch_size)
         initial_input = self.char_tensor(initial_str)
         predicted = initial_str
@@ -103,7 +119,7 @@ class Generator:
             predicted += predicted_char
             last_char = self.char_tensor(predicted_char)
 
-        return predicted
+        return ' '.join(predicted.split())
 
     # input_size, hidden_size, num_layers, output_size
     def train(self):
@@ -141,7 +157,6 @@ class Generator:
 
             print("Epoch: ", epoch)
             print(f"Loss: {loss}")
-
             print(self.generate())
 
     def load_model(self):
@@ -151,8 +166,10 @@ class Generator:
 
 
 gennames = Generator()
+gennames.load_model()
+
+# Uncomment the text below to train the model
 # gennames.train()
 
-# Loads the model from the checkpoint
-gennames.load_model()
 print(gennames.generate())
+

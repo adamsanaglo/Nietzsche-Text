@@ -165,11 +165,11 @@ class Generator:
         trained.eval()
 
 
-gennames = Generator()
-gennames.load_model()
+gen = Generator()
+gen.load_model()
 
 # Uncomment the text below to train the model
-# gennames.train()
+# gen.train()
 
-print(gennames.generate())
+print(gen.generate())
 
